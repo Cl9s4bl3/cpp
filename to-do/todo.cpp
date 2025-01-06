@@ -80,6 +80,11 @@ void removeTask() {
 	
 	inFile >> data;
 
+	if (data.empty()) {
+		std::cout << "\nYou haven't added any tasks yet.\n";
+		return;
+	}
+
 	std::cout << "\nAvailable tasks:\n" << std::endl;
 
 	for (auto& [task, check] : data.items()) {
