@@ -1,3 +1,5 @@
+//To-do: Master pass change
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -20,11 +22,6 @@ std::string static generateRandomString(int length) {
     }
 
     return randomString;
-}
-
-void static removePassword() {
-    //Add remove password logic
-    return;
 }
 
 void static listPasswords() {
@@ -53,6 +50,57 @@ void static listPasswords() {
     else {
         std::cout << "\nInvalid master password." << std::endl;
     }
+    inFile.close();
+}
+
+void static removePassword() {
+    json data;
+
+    std::string pass_name;
+    std::string master;
+
+    std::cout << "\nEnter master password: ";
+    std::getline(std::cin, master);
+
+    std::ifstream inFile("passwords.json");
+    inFile >> data;
+
+    if (data["master"] == master) {
+        if (data.size() == 1) {
+            std::cout << "\nNo passwords have been added yet." << std::endl;
+            return;
+        }
+        std::cout << "\nSaved passwords:\n" << std::endl;
+        for (auto& [name, pass] : data.items()) {
+            if (name == "master") {
+                continue;
+            }
+            std::cout << "- " << name << ": " << pass << std::endl;
+        }
+    }
+    else {
+        std::cout << "\nInvalid master password." << std::endl;
+        return;
+    }
+    
+
+
+
+
+    std::cout << "\nEnter the name of the password you'd like to delete: ";
+    std::getline(std::cin, pass_name);
+
+    if (!data.contains(pass_name)) {
+        std::cout << "\nPassword \"" << pass_name << " \"does not exist." << std::endl;
+        return;
+    }
+
+    data.erase(pass_name);
+
+    std::ofstream outFile("passwords.json");
+    outFile << data.dump(4);
+
+    std::cout << "\nPassword \"" << pass_name << "\" was successfully deleted." << std::endl;
     inFile.close();
 }
 
