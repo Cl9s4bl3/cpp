@@ -1,4 +1,6 @@
-//To-do: Master pass change
+//To-do:
+// - Master password change
+// - Add own password
 
 #include <iostream>
 #include <cstdlib>
@@ -15,7 +17,7 @@ bool static jsonEmpty(const json& data) {
 
 std::string static generateRandomString(int length) {
     std::string characters = "A@BCDEFGHIJKLMNOPQR0123456789STU(VWXYZabcdefghij!klmnopqrstuvwx)yz";
-    std::string randomString = "";
+    std::string randomString;
 
     for (int i = 0; i < length; i++) {
         randomString += characters[rand() % characters.size()];
@@ -172,6 +174,8 @@ void static addPassword() {
 
     outFile << data.dump(4);
     outFile.close();
+
+    std::cout << "\nPassword for \"" << passName << "\" was successfully added." << std::endl;
 }
 
 
@@ -215,6 +219,5 @@ int main() {
             }
         }
     }
-    
     return 0;
 }
