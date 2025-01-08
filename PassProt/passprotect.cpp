@@ -371,7 +371,7 @@ int main() {
                 return 0;
 
             default:
-                std::cout << "Invalid action. Choose 1-4" << std::endl;
+                std::cout << "Invalid action. Choose 1-6" << std::endl;
                 break;
             }
         }
