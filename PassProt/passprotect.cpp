@@ -1,5 +1,4 @@
 //To-do:
-// - Master password change
 // - Add own password
 
 #include <iostream>
@@ -24,6 +23,53 @@ std::string static generateRandomString(int length) {
     }
 
     return randomString;
+}
+
+void static changeMaster() {
+    json data;
+
+    std::string oldPass;
+    std::string newPass;
+
+    std::ifstream inFile("passwords.json");
+
+    if (!inFile.is_open()) {
+        std::cerr << "Failed to open the file." << std::endl;
+        return;
+    }
+
+    if (inFile.peek() == std::ifstream::traits_type::eof()) {
+        std::cout << "\nYou don't have a master password yet." << std::endl;
+        return;
+    }
+
+    inFile >> data;
+
+
+    if (!data.contains("master")) {
+        std::cout << "\nYou don't have a master password yet." << std::endl;
+        return;
+    }
+
+    std::cout << "Enter your old password: ";
+    std::getline(std::cin, oldPass);
+
+    if (data["master"] != oldPass) {
+        std::cout << "\nInvalid old master password." << std::endl;
+        return;
+    }
+
+    std::cout << "\nEnter the new master password: ";
+    std::getline(std::cin, newPass);
+
+    data["master"] = newPass;
+
+    std::ofstream outFile("passwords.json");
+    outFile << data.dump(4);
+
+    std::cout << "\nSuccessfully changed master password" << std::endl;
+    inFile.close();
+    outFile.close();
 }
 
 void static listPasswords() {
@@ -104,6 +150,7 @@ void static removePassword() {
 
     std::cout << "\nPassword \"" << pass_name << "\" was successfully deleted." << std::endl;
     inFile.close();
+    outFile.close();
 }
 
 void static addPassword() {
@@ -183,7 +230,7 @@ int main() {
     while (true) {
         int action;
 
-        std::cout << "\nAvailable actions:\n1) Add password\n2) List all passwords\n3) Delete password\n4) Exit" << std::endl;
+        std::cout << "\nAvailable actions:\n1) Add password\n2) List all passwords\n3) Delete password\n4) Change master password\n5) Exit" << std::endl;
 
         std::cout << "\nChoose an action: ";
 
@@ -211,6 +258,10 @@ int main() {
                     break;
 
                 case 4:
+                    changeMaster();
+                    break;
+
+                case 5:
                     return 0;
 
                 default:
