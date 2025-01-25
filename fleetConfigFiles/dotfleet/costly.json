@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "type": "command",
+            "name": "Run",
+            "program": "$PROJECT_DIR$/main.exe",
+            "args": [],
+            "dependsOn": ["Build"]
+        },
+        {
+            "type": "command",
+            "name": "Build",
+            "program": "g++.exe",
+            "args": ["-static", "-o", "main.exe", "src/main.cpp", "src/inex.cpp", "src/overview.cpp", "src/category.cpp", "src/datamanager.cpp"]
+        }
+    ]
+}
