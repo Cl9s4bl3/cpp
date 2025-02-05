@@ -6,6 +6,7 @@
 #include <tuple>
 
 #include "include/json.hpp"
+#include "headers/overview.h"
 #include "headers/category.h"
 
 #define FILE "main.json"
@@ -40,6 +41,44 @@ void createCategory(){
 
 void categoryEntryManager(){
 
+    json data;
+
+    std::string entry_name;
+    std::string cat_name;
+
+    overView();
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "\nEnter the name of the entry: ";
+    std::getline(std::cin, entry_name);
+
+    std::cout << "\nEnter the name of the category: ";
+    std::getline(std::cin, cat_name);
+
+
+
+    std::ifstream inFile(FILE);
+    inFile >> data;
+    inFile.close();
+
+    //There's an error that causes the text not to appear after entering an invalid entry
+
+    if (!(data["expense"].contains(entry_name) || data["income"].contains(entry_name))){
+        std::cout << "\nThis entry does not exist." << std::endl;
+        return;
+    } else {
+        if (!data["categories"].contains(cat_name)){
+            std::cout << "\nThe specified category does not exist." << std::endl;
+            return;
+        } else {
+            data["categories"][cat_name][entry_name] = {};
+        }
+    }
+
+    std::ofstream outFile(FILE);
+    outFile << data.dump(4);
+    outFile.close();
 }
 
 void removeCategory(){
