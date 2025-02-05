@@ -29,6 +29,10 @@ void createJSON(){
         data["balance"] = 0.0;
     }
 
+    if (!data.contains("categories")){
+        data["categories"] = json::object();
+    }
+
     std::ofstream outFile(FILE);
     outFile << data.dump(4);
     outFile.close();
